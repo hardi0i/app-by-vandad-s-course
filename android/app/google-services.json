@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "176764555098",
+    "project_id": "vanded-course-test-app",
+    "storage_bucket": "vanded-course-test-app.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:176764555098:android:b975d05bacdcc0112fad63",
+        "android_client_info": {
+          "package_name": "com.example.vandad_course_app"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAE8iL-ZbjwK2heNmAZNuxAEu5Pv8xO994"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
