@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:vandad_course_app/constants/routes.dart';
 import 'package:vandad_course_app/services/auth/auth_exceptions.dart';
 import 'package:vandad_course_app/services/auth/auth_service.dart';
-import 'package:vandad_course_app/utilities/show_error_dialog.dart';
+import 'package:vandad_course_app/utilities/dialogs/error_dialog.dart';
 
 class LoginView extends StatefulWidget {
   const LoginView({super.key});
@@ -86,13 +86,13 @@ class _LoginViewState extends State<LoginView> {
                 }
               } on InvalidCredentionalsAuthException {
                 await showErrorDialog(
-                  context,
-                  'Invalid credentials. Check login or password.',
+                  context: context,
+                  text: 'Invalid credentials. Check login or password.',
                 );
               } on GenericAuthException {
                 await showErrorDialog(
-                  context,
-                  'Authentication error ',
+                  context: context,
+                  text: 'Authentication error ',
                 );
               }
             },

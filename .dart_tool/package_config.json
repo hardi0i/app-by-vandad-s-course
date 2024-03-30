@@ -231,21 +231,21 @@
     },
     {
       "name": "leak_tracker",
-      "rootUri": "file:///Users/margaritatsygankovasmm-specialist/.pub-cache/hosted/pub.dev/leak_tracker-10.0.3",
+      "rootUri": "file:///Users/margaritatsygankovasmm-specialist/.pub-cache/hosted/pub.dev/leak_tracker-10.0.0",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.1"
     },
     {
       "name": "leak_tracker_flutter_testing",
-      "rootUri": "file:///Users/margaritatsygankovasmm-specialist/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-3.0.2",
+      "rootUri": "file:///Users/margaritatsygankovasmm-specialist/.pub-cache/hosted/pub.dev/leak_tracker_flutter_testing-2.0.1",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.1"
     },
     {
       "name": "leak_tracker_testing",
-      "rootUri": "file:///Users/margaritatsygankovasmm-specialist/.pub-cache/hosted/pub.dev/leak_tracker_testing-3.0.0",
+      "rootUri": "file:///Users/margaritatsygankovasmm-specialist/.pub-cache/hosted/pub.dev/leak_tracker_testing-2.0.1",
       "packageUri": "lib/",
-      "languageVersion": "3.2"
+      "languageVersion": "3.1"
     },
     {
       "name": "lints",
@@ -548,7 +548,7 @@
       "languageVersion": "3.2"
     }
   ],
-  "generated": "2024-03-03T19:16:30.120295Z",
+  "generated": "2024-03-24T19:39:08.108422Z",
   "generator": "pub",
-  "generatorVersion": "3.4.0-92.0.dev"
+  "generatorVersion": "3.3.1"
 }

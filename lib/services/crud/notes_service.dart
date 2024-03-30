@@ -4,7 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:path/path.dart' show join;
-import 'package:vandad_course_app/services/crud/crudexceptions.dart';
+import 'package:vandad_course_app/extensions/list/filter.dart';
+import 'package:vandad_course_app/services/crud/crud_exceptions.dart';
 
 const dbName = 'notes.db';
 const noteTable = 'note';
@@ -35,25 +36,53 @@ class NotesService {
 
   List<DatabaseNote> _notes = [];
 
+  DatabaseUser? _user;
+
   static final NotesService _shared = NotesService._sharedInstance();
-  NotesService._sharedInstance();
+  NotesService._sharedInstance() {
+    _notesStreamController = StreamController<List<DatabaseNote>>.broadcast(
+      onListen: () {
+        _notesStreamController.sink.add(_notes);
+      },
+    );
+  }
 
   factory NotesService() => _shared;
 
-  final _notesStreamController =
-      StreamController<List<DatabaseNote>>.broadcast();
+  late final StreamController<List<DatabaseNote>> _notesStreamController;
 
-  Stream<List<DatabaseNote>> get allNotes => _notesStreamController.stream;
+  Stream<List<DatabaseNote>> get allNotes =>
+      _notesStreamController.stream.filter(
+        (note) {
+          final currentUser = _user;
 
-  Future<DatabaseUser> getOrCreateUser({required String email}) async {
+          if (_user != null) {
+            return note.userId == currentUser?.id;
+          } else {
+            throw UserShouldBeSetBeforeReadingAllNotes();
+          }
+        },
+      );
+
+  Future<DatabaseUser> getOrCreateUser({
+    required String email,
+    bool setAsCurrentUser = true,
+  }) async {
     try {
       await _ensureDbIsOpen();
       final user = await getUser(email: email);
+
+      if (setAsCurrentUser) {
+        _user = user;
+      }
 
       return user;
     } on CouldNotFindUser {
       final createdUser = await createUser(email: email);
 
+      if (setAsCurrentUser) {
+        _user = createdUser;
+      }
       return createdUser;
     } catch (error) {
       rethrow;
@@ -86,6 +115,8 @@ class NotesService {
         textColumn: text,
         isSyncedWithCloudColumn: 0,
       },
+      where: 'id = ?',
+      whereArgs: [note.id],
     );
 
     if (updatesCount == 0) {
@@ -371,7 +402,7 @@ class DatabaseNote {
 
   @override
   String toString() =>
-      'Note, ID = $id, userId = $userId, isSyncedWithCloud = $isSyncedWithCloud';
+      'Note, ID = $id, userId = $userId, isSyncedWithCloud = $isSyncedWithCloud, text = $text';
 
   @override
   bool operator ==(covariant DatabaseUser other) => id == other.id;

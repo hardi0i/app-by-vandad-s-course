@@ -189,7 +189,11 @@ class MockAuthProvider implements AuthProvider {
 
     if (user == null) throw InvalidCredentionalsAuthException();
 
-    const newUser = AuthUser(isEmailVerified: true, email: 'foo@bar.com');
+    const newUser = AuthUser(
+      id: 'my_id',
+      isEmailVerified: true,
+      email: 'foo@bar.com',
+    );
 
     _user = newUser;
   }
@@ -212,7 +216,11 @@ class MockAuthProvider implements AuthProvider {
 
     if (password == 'foobar') throw InvalidCredentionalsAuthException();
 
-    const user = AuthUser(isEmailVerified: false, email: 'foo@bar.com');
+    const user = AuthUser(
+      id: 'my_id',
+      isEmailVerified: false,
+      email: 'foo@bar.com',
+    );
 
     _user = user;
 

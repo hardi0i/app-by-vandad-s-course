@@ -3,7 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:vandad_course_app/constants/routes.dart';
 import 'package:vandad_course_app/services/auth/auth_exceptions.dart';
 import 'package:vandad_course_app/services/auth/auth_service.dart';
-import 'package:vandad_course_app/utilities/show_error_dialog.dart';
+import 'package:vandad_course_app/utilities/dialogs/error_dialog.dart';
 
 class RegisterView extends StatefulWidget {
   const RegisterView({super.key});
@@ -77,23 +77,23 @@ class _RegisterViewState extends State<RegisterView> {
                 Navigator.of(context).pushNamed(verifyEmailRoute);
               } on WeakPasswordAuthException {
                 await showErrorDialog(
-                  context,
-                  'Weak password',
+                  context: context,
+                  text: 'Weak password',
                 );
               } on EmailAlreadyInUseAuthException {
                 await showErrorDialog(
-                  context,
-                  'Email already in use',
+                  context: context,
+                  text: 'Email already in use',
                 );
               } on InvalidEmailAuthException {
                 await showErrorDialog(
-                  context,
-                  'Invalid email',
+                  context: context,
+                  text: 'Invalid email',
                 );
               } on GenericAuthException {
                 await showErrorDialog(
-                  context,
-                  'Get unknown exception',
+                  context: context,
+                  text: 'Get unknown exception',
                 );
               }
             },
