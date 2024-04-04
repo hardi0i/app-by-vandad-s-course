@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
+import 'package:share_plus/share_plus.dart';
 import 'package:vandad_course_app/services/auth/auth_service.dart';
 import 'package:vandad_course_app/services/cloud/cloud_note.dart';
+import 'package:vandad_course_app/utilities/dialogs/cannote_share_epmty_note_dialog.dart';
 import 'package:vandad_course_app/utilities/generics/get_arguments.dart';
 import 'package:vandad_course_app/services/cloud/firebase_cloud_storage.dart';
 
@@ -103,6 +105,22 @@ class _CreateUpdateNoteViewState extends State<CreateUpdateNoteView> {
     return Scaffold(
       appBar: AppBar(
         title: const Text('New note'),
+        actions: [
+          IconButton(
+            icon: const Icon(
+              Icons.share,
+            ),
+            onPressed: () async {
+              final text = _textController.text;
+
+              if (_note != null || text.isEmpty) {
+                await showCannoteShareEmptyNoteDialog(context);
+              } else {
+                Share.share(text);
+              }
+            },
+          ),
+        ],
       ),
       body: FutureBuilder(
         future: createOrGetExistingNote(context),
