@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:vandad_course_app/constants/routes.dart';
-import 'package:vandad_course_app/services/auth/auth_service.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:vandad_course_app/services/auth/bloc/auth_bloc.dart';
+import 'package:vandad_course_app/services/auth/bloc/auth_event.dart';
 
 class VerifyEmailPageView extends StatelessWidget {
   const VerifyEmailPageView({super.key});
@@ -21,21 +22,18 @@ class VerifyEmailPageView extends StatelessWidget {
           ),
           const Text('Please verify your email adress:'),
           TextButton(
-            onPressed: () async {
-              await AuthService.firebase().emailVerification();
+            onPressed: () {
+              context.read<AuthBloc>().add(
+                    const AuthEventSendEmailVerification(),
+                  );
             },
             child: const Text('Send email verification'),
           ),
           TextButton(
-            onPressed: () async {
-              await AuthService.firebase().logOut();
-
-              if (!context.mounted) return;
-
-              Navigator.of(context).pushNamedAndRemoveUntil(
-                registerRoute,
-                (route) => false,
-              );
+            onPressed: () {
+              context.read<AuthBloc>().add(
+                    const AuthEventLogOut(),
+                  );
             },
             child: const Text('Reload'),
           ),

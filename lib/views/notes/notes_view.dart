@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:vandad_course_app/constants/routes.dart';
 import 'package:vandad_course_app/enums/menu_action.dart';
 import 'package:vandad_course_app/services/auth/auth_service.dart';
+import 'package:vandad_course_app/services/auth/bloc/auth_bloc.dart';
+import 'package:vandad_course_app/services/auth/bloc/auth_event.dart';
 import 'package:vandad_course_app/services/cloud/cloud_note.dart';
 import 'package:vandad_course_app/services/cloud/firebase_cloud_storage.dart';
 import 'package:vandad_course_app/utilities/dialogs/logout_dialog.dart';
@@ -44,15 +47,10 @@ class _NotesViewState extends State<NotesView> {
                 case MenuAction.logout:
                   final shouldLogOut = await showLogOutDialog(context);
 
-                  if (shouldLogOut) {
-                    await AuthService.firebase().logOut();
-
-                    if (!mounted) return;
-
-                    Navigator.of(context).pushNamedAndRemoveUntil(
-                      loginRoute,
-                      (route) => false,
-                    );
+                  if (shouldLogOut && context.mounted) {
+                    context.read<AuthBloc>().add(
+                          const AuthEventLogOut(),
+                        );
                   }
               }
             },

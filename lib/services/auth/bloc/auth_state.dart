@@ -1,3 +1,4 @@
+import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:vandad_course_app/services/auth/auth_user.dart';
 
@@ -6,8 +7,14 @@ abstract interface class AuthState {
   const AuthState();
 }
 
-class AuthStateLoading extends AuthState {
-  const AuthStateLoading();
+class AuthStateUnitialized extends AuthState {
+  const AuthStateUnitialized();
+}
+
+class AuthStateRegistering extends AuthState {
+  const AuthStateRegistering(this.exception);
+
+  final Exception? exception;
 }
 
 class AuthStateLoggedIn extends AuthState {
@@ -16,22 +23,22 @@ class AuthStateLoggedIn extends AuthState {
   final AuthUser user;
 }
 
-class AuthStateLoginFailure extends AuthState {
-  const AuthStateLoginFailure(this.exception);
-
-  final Exception exception;
-}
-
 class AuthStateNeedsVerification extends AuthState {
   const AuthStateNeedsVerification();
 }
 
-class AuthStateLoggedOut extends AuthState {
-  const AuthStateLoggedOut();
-}
+class AuthStateLoggedOut extends AuthState with EquatableMixin {
+  const AuthStateLoggedOut({
+    required this.exception,
+    required this.isLoading,
+  });
 
-class AuthStateLogoutFailure extends AuthState {
-  const AuthStateLogoutFailure(this.exception);
+  final Exception? exception;
+  final bool isLoading;
 
-  final Exception exception;
+  @override
+  List<Object?> get props => [
+        exception,
+        isLoading,
+      ];
 }
