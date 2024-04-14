@@ -6,11 +6,12 @@ import 'package:vandad_course_app/services/cloud/cloud_storage_exceptions.dart';
 class FirebaseCloudStorage {
   final notes = FirebaseFirestore.instance.collection('notes');
 
-  FirebaseCloudStorage._sharedInstance();
+  factory FirebaseCloudStorage() => _shared;
+
   static final FirebaseCloudStorage _shared =
       FirebaseCloudStorage._sharedInstance();
 
-  factory FirebaseCloudStorage() => _shared;
+  FirebaseCloudStorage._sharedInstance();
 
   Future<void> deleteNote({required String documentId}) async {
     try {

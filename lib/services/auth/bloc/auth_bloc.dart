@@ -6,7 +6,7 @@ import 'package:vandad_course_app/services/auth/bloc/auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   AuthBloc(this._provider)
       : super(
-          const AuthStateUnitialized(),
+          const AuthStateUnitialized(isLoading: true),
         ) {
     on<AuthEventSendEmailVerification>(authEventSendEmailVerification);
     on<AuthEventInitialize>(authEventInitialize);
@@ -14,6 +14,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     on<AuthEventLogOut>(authEventLogout);
     on<AuthEventRegister>(authEventRegister);
     on<AuthEventShouldRegister>(authEventShouldRegister);
+    on<AuthEventForgotPassword>(authEventForgotPassword);
   }
 
   final AuthProvider _provider;
@@ -36,11 +37,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       );
     } else if (!user.isEmailVerified) {
       emit(
-        const AuthStateNeedsVerification(),
+        const AuthStateNeedsVerification(isLoading: false),
       );
     } else {
       emit(
-        AuthStateLoggedIn(user),
+        AuthStateLoggedIn(user: user, isLoading: false),
       );
     }
   }
@@ -61,11 +62,11 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       await _provider.emailVerification();
 
       emit(
-        const AuthStateNeedsVerification(),
+        const AuthStateNeedsVerification(isLoading: false),
       );
     } on Exception catch (e) {
       emit(
-        AuthStateRegistering(e),
+        AuthStateRegistering(exception: e, isLoading: false),
       );
     }
   }
@@ -87,6 +88,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
       const AuthStateLoggedOut(
         exception: null,
         isLoading: true,
+        loadingText: 'Wait until login',
       ),
     );
 
@@ -108,7 +110,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
 
         emit(
-          const AuthStateNeedsVerification(),
+          const AuthStateNeedsVerification(isLoading: false),
         );
       } else {
         emit(
@@ -119,7 +121,10 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
         );
 
         emit(
-          AuthStateLoggedIn(user),
+          AuthStateLoggedIn(
+            user: user,
+            isLoading: false,
+          ),
         );
       }
     } on Exception catch (error) {
@@ -137,7 +142,57 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     Emitter emit,
   ) async {
     emit(
-      const AuthStateRegistering(null),
+      const AuthStateRegistering(
+        exception: null,
+        isLoading: false,
+      ),
+    );
+  }
+
+  Future<void> authEventForgotPassword(
+    AuthEventForgotPassword event,
+    Emitter emit,
+  ) async {
+    emit(
+      const AuthStateForgotPassword(
+        exception: null,
+        hasSentEmail: false,
+        isLoading: false,
+      ),
+    );
+
+    final email = event.email;
+
+    if (email == null) {
+      return;
+    }
+
+    emit(
+      const AuthStateForgotPassword(
+        exception: null,
+        hasSentEmail: false,
+        isLoading: true,
+      ),
+    );
+
+    bool didSentEmail;
+    Exception? exception;
+
+    try {
+      await _provider.sendPasswordReset(email: email);
+      didSentEmail = true;
+      exception = null;
+    } on Exception catch (e) {
+      didSentEmail = false;
+      exception = e;
+    }
+
+    emit(
+      AuthStateForgotPassword(
+        exception: exception,
+        hasSentEmail: didSentEmail,
+        isLoading: false,
+      ),
     );
   }
 
