@@ -1,1 +1,0 @@
- /Users/margaritatsygankovasmm-specialist/Fork/app-by-vandad-s-course/.dart_tool/flutter_build/0d2939f29df2b6eee24fd6d5a9cf313c/native_assets.yaml: 
